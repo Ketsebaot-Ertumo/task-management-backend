@@ -1,0 +1,22 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Task {
+  id: Int!
+  title: String!
+  description: String!
+  status: String!
+  completed: Boolean!
+}
+
+type Query {
+  GetAllTasks: [Task!]!
+  GetTaskById(id: Int!): Task
+}
+
+type Mutation {
+  createTask(title: String!, description: String!, status: String!, completed: Boolean!): Task!
+  updateTask(id: Int!, title: String!, description: String!, status: String!, completed: Boolean!): Task!
+  deleteTask(id: Int!): Boolean!
+}
