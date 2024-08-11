@@ -10,16 +10,12 @@ export class TaskService {
     private readonly taskRepository: Repository<Task>,
   ) {}
 
-  async GetAll(): Promise<Task[]> {
+  async getAll(): Promise<Task[]> {
     return this.taskRepository.find();
   }
 
-  async GetById(id: number): Promise<Task> {
+  async getById(id: number): Promise<Task> {
     return this.taskRepository.findOneBy({ id });
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.taskRepository.delete(id);
   }
 
   async create(task: Partial<Task>): Promise<Task> {

@@ -11,12 +11,12 @@ type Task {
 }
 
 type Query {
-  GetAllTasks: [Task!]!
-  GetTaskById(id: Int!): Task
+  getAllTasks: [Task!]!
+  getTaskById(id: Int!): Task
 }
 
 type Mutation {
-  createTask(title: String!, description: String!, status: String!, completed: Boolean!): Task!
+  createTask(title: String!, description: String!, status: String!): Task!
   updateTask(id: Int!, title: String!, description: String!, status: String!, completed: Boolean!): Task!
   deleteTask(id: Int!): Boolean!
 }

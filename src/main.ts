@@ -5,14 +5,20 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
-    app.useGlobalPipes();
-
-    app.use('/graphql', (req, res, next) => {
-      if (req.method === 'GET') {
-        req.body = { query: req.query.query };
-      }
-      next();
+    // Enable CORS
+    app.enableCors({
+      origin: 'http://localhost:8080', // Allow requests from this origin
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed methods
+      credentials: true, // If you want to allow cookies and other credentials
     });
+
+    // app.useGlobalPipes();
+    // app.use('/graphql', (req, res, next) => {
+    //   if (req.method === 'GET') {
+    //     req.body = { query: req.query.query };
+    //   }
+    //   next();
+    // });
     await app.listen(4000);
     console.log('Connected to database');
   } catch (error) {

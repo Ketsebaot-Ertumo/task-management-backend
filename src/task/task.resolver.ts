@@ -7,23 +7,39 @@ export class TaskResolver {
   constructor(private readonly taskService: TaskService) {}
 
   @Query(() => [Task])
-    async GetAllTasks(): Promise<Task[]> {
-      return this.taskService.GetAll();
+    async getAllTasks(): Promise<Task[]> {
+      try{
+        return this.taskService.getAll();
+      }catch(error){
+        console.log('Error on showing tasks!:',error);
+        return;
+      }
     }
 
   @Query(() => Task, { nullable: true })
-    async GetTaskById(@Args('id', { type: () => Int }) id: number): Promise<Task> {
-      return this.taskService.GetById(id);
+    async getTaskById(@Args('id', { type: () => Int }) id: number): Promise<Task> {
+      try{
+        return this.taskService.getById(id);
+      }catch(error){
+        console.log('Error on showing task:',error);
+        return;
+      }
     }
 
   @Mutation(() => Task)
     async createTask(
       @Args('title') title: string,
       @Args('description') description: string,
-      @Args('status') status: string,
-      @Args('completed', { type: () => Boolean }) completed: boolean,): Promise<Task> {
-        return this.taskService.create({ title, description, status, completed });
+      @Args('status', { type: () => String }) status: string,): Promise<Task> {
+      // @Args('status') status: string,
+      // @Args('completed', { type: () => Boolean }) completed: boolean,): Promise<Task> {
+      try{
+        return this.taskService.create({ title, description, status });
+      }catch(error){
+        console.log('Error on creating task:',error);
+        return;
       }
+    }
 
   @Mutation(() => Task)
   async updateTask(
@@ -33,12 +49,32 @@ export class TaskResolver {
     @Args('status') status: string,
     @Args('completed', { type: () => Boolean }) completed: boolean,
   ): Promise<Task> {
-    return this.taskService.update(id, { title, description, status, completed });
+    try{
+      return this.taskService.update(id, { title, description, status, completed });
+    }catch(error){
+      console.error('Error deleting task:', error);
+      return;
+    }
   }
 
   @Mutation(() => Boolean)
   async deleteTask(@Args('id', { type: () => Int }) id: number): Promise<boolean> {
-    await this.taskService.remove(id);
-    return true;
+    try {
+      const taskExists = await this.taskService.getById(id);
+      if (!taskExists) {
+        return false; // Task with the given id doesn't exist
+      }
+      await this.taskService.delete(id);
+      return true; // Task was successfully deleted
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      return false;
+    }
   }
+
+  // @Mutation(() => Boolean)
+  // async deleteTask(@Args('id', { type: () => Int }) id: number): Promise<boolean> {
+  //   await this.taskService.delete(id);
+  //   return true;
+  // }
 }
